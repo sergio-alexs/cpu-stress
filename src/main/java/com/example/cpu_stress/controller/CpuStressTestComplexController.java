@@ -35,7 +35,7 @@ public class CpuStressTestComplexController {
         int numThreads = Runtime.getRuntime().availableProcessors(); // Número de núcleos disponibles
         long duration = producto.getIterations() * 1000; // Duración en milisegundos (10 segundos)
         System.out.println("Estresando la CPU durante " + (duration / 1000) + " segundos usando " + numThreads + " hilos.");
-        model.addAttribute("message", "Estresando la CPU durante " + (duration / 100) + " segundos usando " + numThreads + " hilos.");
+        model.addAttribute("message", "Estresando la CPU durante " + (duration / 1000) + " segundos usando " + numThreads + " hilos.");
 
         String hostIP = System.getenv("MY_IP");
         // Comprobar si la variable está disponible
