@@ -5,6 +5,7 @@ FROM amazonlinux:2 AS build
 RUN yum install -y \
     java-17-amazon-corretto-devel \
     git \
+    tar \
     && yum clean all
 
 # Instala Maven Wrapper (si aun no esta incluido en tu proyecto)
@@ -28,7 +29,7 @@ FROM amazoncorretto:17-alpine
 WORKDIR /app
 
 # Copia el jar desde la etapa de compilacion
-COPY --from=build /app/target/*.jar app.jar
+COPY --from=build /target/*.jar app.jar
 
 # Expone el puerto 8080
 EXPOSE 8080
