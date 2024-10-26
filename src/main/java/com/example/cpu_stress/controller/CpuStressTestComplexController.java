@@ -21,11 +21,13 @@ public class CpuStressTestComplexController {
         model.addAttribute("boton", "stress");
 
         try {
-            InetAddress containerIp = InetAddress.getLocalHost();
-            System.out.println("La IP del contenedor es: " + containerIp.getHostAddress());
-            model.addAttribute("ip", containerIp.getHostAddress());
+            // Obtener la IP del host usando host.docker.internal
+            InetAddress hostAddress = InetAddress.getByName("host.docker.internal");
+            String hostIp = hostAddress.getHostAddress();
+            model.addAttribute("ip", hostIp);
+            System.out.println("IP del host: " + hostIp);
         } catch (UnknownHostException e) {
-            System.out.println("No se pudo obtener la IP del contenedor: " + e.getMessage());
+            e.printStackTrace();
         }
 
         return Mono.just("index");
@@ -38,13 +40,17 @@ public class CpuStressTestComplexController {
         long duration = producto.getIterations() * 100; // Duración en milisegundos (10 segundos)
         System.out.println("Estresando la CPU durante " + (duration / 100) + " decisegundos usando " + numThreads + " hilos.");
         model.addAttribute("message", "Estresando la CPU durante " + (duration / 100) + " decisegundos usando " + numThreads + " hilos.");
+
         try {
-            InetAddress containerIp = InetAddress.getLocalHost();
-            System.out.println("La IP del contenedor es: " + containerIp.getHostAddress());
-            model.addAttribute("ip", containerIp.getHostAddress());
+            // Obtener la IP del host usando host.docker.internal
+            InetAddress hostAddress = InetAddress.getByName("host.docker.internal");
+            String hostIp = hostAddress.getHostAddress();
+            model.addAttribute("ip", hostIp);
+            System.out.println("IP del host: " + hostIp);
         } catch (UnknownHostException e) {
-            System.out.println("No se pudo obtener la IP del contenedor: " + e.getMessage());
+            e.printStackTrace();
         }
+
         System.out.println(producto.getIterations());
         model.addAttribute("titulo", "Resultado de Iteraciones");
         model.addAttribute("iterations", producto.getIterations());
