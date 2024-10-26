@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title th:text="${titulo}">Insert title here</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			height: 100vh;
+			margin: 0;
+			background: #f4f4f9;
+		}
+
+		.container {
+			background: #ffffff;
+			border-radius: 8px;
+			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+			padding: 20px;
+			width: 300px;
+			text-align: center;
+		}
+
+		h1 {
+			color: #333333;
+			font-size: 24px;
+		}
+
+		label {
+			font-size: 16px;
+			color: #555555;
+			display: block;
+			margin-bottom: 8px;
+		}
+
+		input[type="number"] {
+			width: 90%;
+			padding: 10px;
+			margin-bottom: 20px;
+			border-radius: 4px;
+			border: 1px solid #dddddd;
+			font-size: 16px;
+		}
+
+		.button2 {
+			background-color: #ff5722;
+			color: white;
+			border: none;
+			padding: 12px 20px;
+			border-radius: 4px;
+			font-size: 16px;
+			cursor: pointer;
+			width: 100%;
+			transition: background 0.3s ease;
+		}
+
+		.button2:hover {
+			background-color: #e64a19;
+		}
+	</style>
+</head>
+<body>
+<div class="container">
+	<div th:if="${ip} != null">
+		<p>ip: <span th:text="${ip}"></span></p>
+	</div>
+
+	<h1 th:text="${titulo}"></h1>
+
+	<form id="cpuStressForm" th:action="@{/result}" method="post" th:object="${product}">
+
+		<label for="number">Número de iterations</label>
+
+		<input type="number" th:field="*{iterations}" min="1" placeholder="Ej. 1000000" required>
+
+		<div>
+			<div>
+				<input class="button2" type="submit" th:value="${boton}"/>
+			</div>
+		</div>
+	</form>
+
+
+</div>
+
+<script>
+	document.getElementById('cpuStressForm').addEventListener('submit', function(event) {
+		const iterations = document.getElementById('iterations').value;
+		console.log(`Ejecutando estrés con ${iterations} iteraciones`);
+	});
+</script>
+</body>
+</html>
