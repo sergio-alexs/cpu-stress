@@ -7,9 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import reactor.core.publisher.Mono;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-
 @Controller
 public class CpuStressTestComplexController {
 
@@ -20,16 +17,15 @@ public class CpuStressTestComplexController {
         model.addAttribute("product", new Product());
         model.addAttribute("boton", "stress");
 
-        try {
-            // Obtener la IP del host usando host.docker.internal
-            InetAddress hostAddress = InetAddress.getByName("host.docker.internal");
-            String hostIp = hostAddress.getHostAddress();
-            model.addAttribute("ip", hostIp);
-            System.out.println("IP del host: " + hostIp);
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
+        String hostIP = System.getenv("MY_IP");
 
+        // Comprobar si la variable está disponible
+        if (hostIP != null) {
+            System.out.println("El valor de MY_IP es: " + hostIP);
+            model.addAttribute("ip", hostIP);
+        } else {
+            System.out.println("MY_IP no está definida.");
+        }
         return Mono.just("index");
     }
 
@@ -37,22 +33,21 @@ public class CpuStressTestComplexController {
     @PostMapping("/result")
     public Mono<String> result(Product producto, Model model) {
         int numThreads = Runtime.getRuntime().availableProcessors(); // Número de núcleos disponibles
-        long duration = producto.getIterations() * 100; // Duración en milisegundos (10 segundos)
-        System.out.println("Estresando la CPU durante " + (duration / 100) + " decisegundos usando " + numThreads + " hilos.");
-        model.addAttribute("message", "Estresando la CPU durante " + (duration / 100) + " decisegundos usando " + numThreads + " hilos.");
+        long duration = producto.getIterations() * 1000; // Duración en milisegundos (10 segundos)
+        System.out.println("Estresando la CPU durante " + (duration / 1000) + " segundos usando " + numThreads + " hilos.");
+        model.addAttribute("message", "Estresando la CPU durante " + (duration / 100) + " segundos usando " + numThreads + " hilos.");
 
-        try {
-            // Obtener la IP del host usando host.docker.internal
-            InetAddress hostAddress = InetAddress.getByName("host.docker.internal");
-            String hostIp = hostAddress.getHostAddress();
-            model.addAttribute("ip", hostIp);
-            System.out.println("IP del host: " + hostIp);
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
+        String hostIP = System.getenv("MY_IP");
+        // Comprobar si la variable está disponible
+        if (hostIP != null) {
+            System.out.println("El valor de MY_IP es: " + hostIP);
+            model.addAttribute("ip", hostIP);
+        } else {
+            System.out.println("MY_VARIABLE no está definida.");
         }
 
         System.out.println(producto.getIterations());
-        model.addAttribute("titulo", "Resultado de Iteraciones");
+        model.addAttribute("titulo", "Resultado");
         model.addAttribute("iterations", producto.getIterations());
         model.addAttribute("result", duration);
 
@@ -64,7 +59,6 @@ public class CpuStressTestComplexController {
                 }
             }).start();
         }
-
 
         return Mono.just("result");
     }

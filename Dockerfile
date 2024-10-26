@@ -31,6 +31,15 @@ WORKDIR /app
 # Copia el jar desde la etapa de compilacion
 COPY --from=build /target/*.jar app.jar
 
+# Declarar un argumento para la IP
+ARG MY_IP
+
+# Establecer la variable de entorno a partir del argumento
+ENV MY_IP=${MY_IP}
+
+# Usar el argumento en un comando para verificarlo
+RUN echo "La dirección IP es: $MY_IP" > /app/my_ip.txt
+
 # Expone el puerto 8080
 EXPOSE 8080
 

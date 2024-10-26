@@ -72,7 +72,7 @@
 
 	<form id="cpuStressForm" th:action="@{/result}" method="post" th:object="${product}">
 
-		<label for="number">Número de iterations</label>
+		<label for="number">Número de segundos</label>
 
 		<input type="number" th:field="*{iterations}" min="1" placeholder="Ej. 1000000" required>
 
